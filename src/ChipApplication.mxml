@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:mx="library://ns.adobe.com/flex/mx" width="955" height="600"
+	xmlns:vo="com.plo.chipApp.models.vo.*" xmlns:chipApp="com.plo.chipApp.*"
+	xmlns:components="com.plo.chipApp.views.components.*">
+	<fx:Declarations>
+		<chipApp:ChipAppContext contextView="{this}"/>
+		<mx:ArrayCollection id="stacksValues">
+			<vo:Stack chipValue="{Chip.C1}" color="0xFFFFFF"/>
+			<vo:Stack chipValue="{Chip.C5}" color="0xFF0000"/>
+			<vo:Stack chipValue="{Chip.C10}" color="0x0000FF"/>
+			<vo:Stack chipValue="{Chip.C50}" color="0xffa200"/>
+			<vo:Stack chipValue="{Chip.C100}" color="0x000000"/>
+			<vo:Stack chipValue="{Chip.C500}" color="0xbb00d7"/>
+			<vo:Stack chipValue="{Chip.C1K}" color="0x9e1844"/>
+			<vo:Stack chipValue="{Chip.C5K}" color="0x78541c"/>
+			<vo:Stack chipValue="{Chip.C10K}" color="0xf7ee06"/>
+		</mx:ArrayCollection>
+	</fx:Declarations>
+	<s:VGroup gap="10" paddingLeft="10" paddingTop="10">
+		<s:HGroup gap="10">
+			<s:VGroup gap="10">
+				<s:HGroup>
+					<s:Button label="Connect" click="onConnectClick()"
+						enabled="{!connected}"/>
+					<s:Button label="Disconnect" click="onDisconnectClick()"
+						enabled="{connected}"/>
+				</s:HGroup>
+				<s:TextArea id="output" width="300" height="300" contentBackgroundColor="0xFFFFFF"/>
+			</s:VGroup>
+			<components:StacksDisplayComponent id="stacksDisplay" width="625" height="100%"
+				dataProvider="{stacksValues}"/>
+		</s:HGroup>
+		<s:Panel title="History values" bottom="0">
+			<s:DataGrid id="historyDatagrid" width="{width - 20}" height="200" bottom="0"
+				dataProvider="{historyDataprovider}">
+				<s:columns>
+					<s:ArrayList>
+						<s:GridColumn headerText="Date" dataField="date"/>
+						<s:GridColumn headerText="Value" dataField="value" itemRenderer="com.plo.chipApp.views.renderers.HistoryItemRenderer"/>
+					</s:ArrayList>
+				</s:columns>
+			</s:DataGrid>
+		</s:Panel>
+
+	</s:VGroup>
+	<fx:Script>
+		<![CDATA[
+			import com.plo.chipApp.models.vo.Chip;
+
+			import org.osflash.signals.Signal;
+
+			import mx.collections.ArrayCollection;
+
+			public var clickConnectSignal : Signal = new Signal();
+			public var clickDisconnectSignal : Signal = new Signal();
+			
+			[Bindable]
+			public var historyDataprovider : ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			public var connected : Boolean = false;
+
+			private function onConnectClick() : void {
+				clickConnectSignal.dispatch();
+			}
+
+			private function onDisconnectClick() : void {
+				clickDisconnectSignal.dispatch();
+			}
+
+			public function getStackByChipValue(value : int) : Stack {
+				for (var i : int = 0; i < stacksValues.length; i++) {
+					if ((stacksValues.getItemAt(i) as Stack).chipValue == value) return stacksValues.getItemAt(i) as Stack;
+				}
+				return null;
+			}
+
+			public function log(value : String) : void {
+				var now : Date = new Date();
+				output.text += '- ' + now.toTimeString() + ' : ' + value + '\n';
+			}
+		]]>
+	</fx:Script>
+</s:Application>

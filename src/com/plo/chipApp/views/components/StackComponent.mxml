@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableDataContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:vo="com.plo.chipApp.models.vo.*" width="50" height="300"
+			 itemRenderer="com.plo.chipApp.views.renderers.ChipItemRenderer"
+			 skinClass="com.plo.chipApp.views.skins.StackComponentSkin">
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.plo.chipApp.models.vo.Chip;
+			
+			public var chipStackValue : int = Chip.C1;
+			
+			public var chipColor : uint = 0;
+		]]>
+	</fx:Script>
+	
+</s:SkinnableDataContainer>

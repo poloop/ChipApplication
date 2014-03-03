@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:s="library://ns.adobe.com/flex/spark"
+                xmlns:mx="library://ns.adobe.com/flex/mx"
+                xmlns:components="com.plo.chipApp.views.components.*"
+				autoDrawBackground="false" minWidth="50" minHeight="20">
+	<s:layout>
+		<s:VerticalLayout verticalAlign="bottom" horizontalAlign="center" gap="10"/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import com.plo.chipApp.models.vo.Chip;
+			import com.plo.chipApp.models.vo.Stack;
+			
+			import mx.collections.ArrayCollection;
+			
+			import spark.components.SkinnableDataContainer;
+			
+			[Bindable]
+			public var chipStackValue : int = Chip.C1;
+
+			[Bindable]
+			public var chipColor : uint = 0;
+			
+			[Bindable]
+			public var stackData : ArrayCollection = new ArrayCollection();
+			
+			override public function set data(value : Object) : void {
+				super.data = null;
+				super.data = value;
+				
+				chipColor = (data as Stack).color;
+				chipStackValue = (data as Stack).chipValue;
+				
+				stackData.source = (data as Stack).chips;
+				
+				explicitWidth = owner.width / (owner as SkinnableDataContainer).dataProvider.length;
+				
+			}
+			
+			public function updateStack(value : int) : void {
+				(data as Stack).fill(value, chipColor);
+				stackData.source = (data as Stack).chips;
+			}
+			
+		]]>
+	</fx:Script>
+	<components:StackComponent chipStackValue="{chipStackValue}" dataProvider="{stackData}" chipColor="{chipColor}"/>
+	<s:Label text="{chipStackValue}" fontWeight="bold" color="0xFFFFFF"/>
+</s:ItemRenderer>
